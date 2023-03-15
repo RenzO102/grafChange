@@ -113,6 +113,7 @@ public class AccountResource {
 
     /**
      * Тут запрос на сервер
+     *
      */
     @Autowired
     private Month month;

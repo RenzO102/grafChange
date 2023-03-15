@@ -7,6 +7,7 @@ public class People {
     private String percentY;
     private String name;
     private int main;
+
     public int y;
     private int z;
 

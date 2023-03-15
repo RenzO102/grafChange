@@ -42,6 +42,7 @@ public class Quarter {
                 }
                 updateValueQuarter(months, quarter.getName(), mainTest.getMain());
             });
+
         return new Quarter();
     }
 

@@ -17,6 +17,7 @@ public class MonthData {
 
     public MonthData addValue() {
         value++;
+
         return this;
     }
 }
