@@ -6,15 +6,21 @@ import com.mycompany.myapp.service.MailService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.PasswordChangeDTO;
-import com.mycompany.myapp.web.rest.errors.*;
+import com.mycompany.myapp.web.rest.errors.EmailAlreadyUsedException;
+import com.mycompany.myapp.web.rest.errors.InvalidPasswordException;
+import com.mycompany.myapp.web.rest.errors.LoginAlreadyUsedException;
 import com.mycompany.myapp.web.rest.vm.KeyAndPasswordVM;
 import com.mycompany.myapp.web.rest.vm.ManagedUserVM;
+import com.mycompany.myapp.web.rest.vm.parseJson.Month;
+import com.mycompany.myapp.web.rest.vm.parseJson.Quarter;
+import com.mycompany.myapp.web.rest.vm.parseJson.Week;
 import java.security.Principal;
 import java.util.Objects;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
@@ -103,6 +109,30 @@ public class AccountResource {
             .getUserWithAuthorities()
             .map(AdminUserDTO::new)
             .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")));
+    }
+
+    /**
+     * Тут запрос на сервер
+     */
+    @Autowired
+    private Month month;
+
+    private Week week;
+    private Quarter quarter;
+
+    @GetMapping("/Quarter")
+    public Quarter getQuarter() throws Exception {
+        return quarter.main();
+    }
+
+    @GetMapping("/Month")
+    public Month getMonth() throws Exception {
+        return month.main();
+    }
+
+    @GetMapping("/Week")
+    public Week getWeek() throws Exception {
+        return week.main();
     }
 
     /**
