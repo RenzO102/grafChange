@@ -3,17 +3,21 @@ package com.mycompany.myapp.web.rest.vm.parseJson;
 import com.google.common.base.Strings;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.Item;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.MainTest;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.MonthData;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
-import java.util.*;
+import java.util.List;
+import java.util.TreeMap;
 
 public class Week {
 
-    public Week main() throws Exception {
+    public static TreeMap<String, Integer> Week() throws Exception {
         List<Item> items = new Gson()
             .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
@@ -22,7 +26,7 @@ public class Week {
             .stream()
             .forEach(i -> {
                 MonthData week;
-                Main mainTest;
+                MainTest mainTest;
                 try {
                     week = getWeek(i.getName());
                     mainTest = getMain(i.getMain());
@@ -39,7 +43,7 @@ public class Week {
             });
 
         System.out.println(weeks.toString());
-        return new Week();
+        return weeks;
     }
 
     public static MonthData getWeek(String date) {
@@ -55,11 +59,11 @@ public class Week {
         }
     }
 
-    public static Main getMain(int main) throws NullPointerException {
+    public static MainTest getMain(int main) throws NullPointerException {
         if (main == 0) {
             System.out.println("null");
         }
-        return new Main(main);
+        return new MainTest(main);
     }
 
     public static void updateValueWeek(TreeMap<String, Integer> months, String name, Integer main) {

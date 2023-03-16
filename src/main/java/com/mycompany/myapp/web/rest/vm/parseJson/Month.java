@@ -3,6 +3,9 @@ package com.mycompany.myapp.web.rest.vm.parseJson;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.Item;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.MainTest;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.MonthData;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -10,28 +13,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class Month {
 
-    public static void updateValue(TreeMap<String, Integer> months, String name, Integer main) {
-        if (months.containsKey(name)) {
-            months.put(name, months.get(name) + main);
-        } else {
-            months.put(name, main);
-        }
-    }
-
-    public Month main() throws Exception {
+    public static TreeMap<String, Integer> Month() throws Exception {
         List<Item> items = new Gson()
             .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
         TreeMap<String, Integer> months = new TreeMap<>();
-        items.forEach(i -> {
+        items.forEach(Item -> {
             MonthData month;
-            Main mainTest;
+            MainTest mainTest;
             try {
-                month = getMoths(i.getName());
-                mainTest = getMain(i.getMain());
+                month = getMoths(Item.getName());
+                mainTest = getMain(Item.getMain());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -45,7 +42,15 @@ public class Month {
         });
         System.out.println(months);
 
-        return new Month();
+        return months;
+    }
+
+    public static void updateValue(TreeMap<String, Integer> months, String name, Integer main) {
+        if (months.containsKey(name)) {
+            months.put(name, months.get(name) + main);
+        } else {
+            months.put(name, main);
+        }
     }
 
     public static MonthData getMoths(String date) throws Exception {
@@ -60,10 +65,10 @@ public class Month {
         }
     }
 
-    public static Main getMain(int main) throws NullPointerException {
+    public static MainTest getMain(int main) throws NullPointerException {
         if (main == 0) {
             System.out.println("null");
         }
-        return new Main(main);
+        return new MainTest(main);
     }
 }

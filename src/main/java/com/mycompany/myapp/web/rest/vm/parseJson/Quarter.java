@@ -3,14 +3,18 @@ package com.mycompany.myapp.web.rest.vm.parseJson;
 import com.google.common.base.Strings;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.Item;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.MainTest;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.MonthData;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.TreeMap;
 
 public class Quarter {
 
-    public void updateValueQuarter(TreeMap<String, Integer> months, String name, Integer main) {
+    public static void updateValueQuarter(TreeMap<String, Integer> months, String name, Integer main) {
         if (months.containsKey(name)) {
             months.put(name, months.get(name) + main);
         } else {
@@ -18,35 +22,35 @@ public class Quarter {
         }
     }
 
-    public Quarter main() throws Exception {
+    public static TreeMap<String, Integer> Quarter() throws Exception {
         List<Item> items = new Gson()
             .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
-        TreeMap<String, Integer> months = new TreeMap<>();
+        TreeMap<String, Integer> quarters = new TreeMap<>();
         items
             .stream()
             .forEach(i -> {
                 MonthData quarter;
-                Main mainTest;
+                MainTest mainTest;
                 try {
                     quarter = getQuarter(i.getName());
                     mainTest = getMain(i.getMain());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                if (months.containsKey(quarter.getName())) {
-                    months.get(quarter.getName()).intValue();
+                if (quarters.containsKey(quarter.getName())) {
+                    quarters.get(quarter.getName()).intValue();
                 } else {
                     quarter.addValue();
-                    months.put(quarter.getName(), quarter.getValue());
+                    quarters.put(quarter.getName(), quarter.getValue());
                 }
-                updateValueQuarter(months, quarter.getName(), mainTest.getMain());
+                updateValueQuarter(quarters, quarter.getName(), mainTest.getMain());
             });
 
-        return new Quarter();
+        return quarters;
     }
 
-    public MonthData getQuarter(String date) throws Exception {
+    public static MonthData getQuarter(String date) throws Exception {
         if (Strings.isNullOrEmpty(date)) {
             System.out.println(" ##### NULL ");
             return new MonthData("x");
@@ -60,10 +64,10 @@ public class Quarter {
         }
     }
 
-    public Main getMain(int main) throws NullPointerException {
+    public static MainTest getMain(int main) throws NullPointerException {
         if (main == 0) {
             System.out.println("null");
         }
-        return new Main(main);
+        return new MainTest(main);
     }
 }

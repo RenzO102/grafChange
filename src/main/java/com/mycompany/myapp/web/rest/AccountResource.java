@@ -16,6 +16,7 @@ import com.mycompany.myapp.web.rest.vm.parseJson.Quarter;
 import com.mycompany.myapp.web.rest.vm.parseJson.Week;
 import java.security.Principal;
 import java.util.Objects;
+import java.util.TreeMap;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -122,18 +123,18 @@ public class AccountResource {
     private Quarter quarter;
 
     @GetMapping("/Quarter")
-    public Quarter getQuarter() throws Exception {
-        return quarter.main();
+    public TreeMap<String, Integer> getQuarter() throws Exception {
+        return quarter.Quarter();
     }
 
     @GetMapping("/Month")
-    public Month getMonth() throws Exception {
-        return month.main();
+    public TreeMap<String, Integer> getMonth() throws Exception {
+        return month.Month();
     }
 
     @GetMapping("/Week")
-    public Week getWeek() throws Exception {
-        return week.main();
+    public TreeMap<String, Integer> getWeek() throws Exception {
+        return week.Week();
     }
 
     /**

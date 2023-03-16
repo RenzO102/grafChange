@@ -1,4 +1,4 @@
-package com.mycompany.myapp.web.rest.vm.parseJson;
+package com.mycompany.myapp.web.rest.vm.parseJson.bean;
 
 import java.time.LocalDate;
 

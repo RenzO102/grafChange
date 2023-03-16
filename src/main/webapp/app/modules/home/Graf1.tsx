@@ -6,18 +6,22 @@ interface Props {
   startDate: Date;
   endDate: Date;
 }
+const getDateWeek = week => {
+  axios.get<any>('/api/Week').then(response => {
+    console.log(response);
+  });
+};
 
 const getDateMonth = month => {
-  axios.get<any>('/api/monthName').then(response => {
+  axios.get<any>('/api/Month').then(response => {
     console.log(response);
-    month(response);
+    const month = response;
   });
 };
 
 const getDateQuarter = quarter => {
-  axios.get<any>(`/api/admin/quarterName`).then(response => {
+  axios.get<any>(`/api/Quarter`).then(response => {
     console.log(response);
-    quarter(response);
   });
 };
 
@@ -90,8 +94,8 @@ export const Graf1: FC<Props> = props => {
       <YAxis />
       <Legend />
       <Tooltip />
-      <Bar dataKey="yandex" stackId="a" fill="#8884d8" onClick={onClickG} />
-      <Bar dataKey="mail" stackId="a" fill="#82ca9d" onClick={onClickYa} />
+      <Bar dataKey="yandex" stackId="a" fill="#8884d8" onClick={getDateMonth} />
+      <Bar dataKey="mail" stackId="a" fill="#82ca9d" onClick={getDateQuarter} />
     </BarChart>
   );
 };
