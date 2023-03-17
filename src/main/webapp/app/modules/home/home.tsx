@@ -1,20 +1,29 @@
 import './home.scss';
-import TableDatePicker from 'app/modules/home/dataPick';
 import React, { useState } from 'react';
 import { Row, Col } from 'reactstrap';
-import Graf1, { data } from 'app/modules/home/Graf1';
+import Graf1 from 'app/modules/home/Graf1';
+import TableDatePicker, { RangeType } from 'app/modules/home/dataPick';
 
 export const Home = () => {
-  const [startDate, setStartDate] = useState(new Date(data[0].date));
-  const [endDate, setEndDate] = useState(new Date(data.slice(-1)[0].date));
+  const [startDate, setStartDate] = useState(new Date('2022-01-01'));
+  const [endDate, setEndDate] = useState(new Date('2022-12-31'));
+  const [dateRange, setDateRange] = useState({});
+  const [rangeType, setRangeType] = useState('weeks' as RangeType);
 
   return (
     <Row>
       <Col>
-        <TableDatePicker startDate={startDate} endDate={endDate} pickStartDate={setStartDate} pickEndDate={setEndDate} />
+        <TableDatePicker
+          startDate={startDate}
+          endDate={endDate}
+          pickStartDate={setStartDate}
+          pickEndDate={setEndDate}
+          pickDateRange={setDateRange}
+          pickRangeType={setRangeType}
+        />
       </Col>
       <Col>
-        <Graf1 startDate={startDate} endDate={endDate} />
+        <Graf1 startDate={startDate} endDate={endDate} dateRange={dateRange} rangeType={rangeType} />
       </Col>
     </Row>
   );

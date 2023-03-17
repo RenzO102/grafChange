@@ -8,28 +8,18 @@ interface Props {
   pickStartDate: (date: Date) => void;
   endDate: Date;
   pickEndDate: (date: Date) => void;
+  pickDateRange: (range: any) => void;
+  pickRangeType: (type: RangeType) => void;
 }
 
-const getDateWeek = async () => {
-  const response = await axios.get<any>('/api/Week');
+export type RangeType = 'weeks' | 'months' | 'quarters';
+
+const requestDateRange = async (rangeType: RangeType) => {
+  const response = await axios.get<any>(`/api/${rangeType}`);
   return response.data;
 };
 
-const getDateMonth = () => {
-  axios.get<any>('/api/Month').then(response => {
-    console.log(response);
-  });
-};
-
-const getDateQuarter = () => {
-  axios.get<any>(`/api/Quarter`).then(response => {
-    console.log(response);
-  });
-};
-
 export const TableDatePicker: FC<Props> = props => {
-  const [weeks, setWeeks] = useState({ '35': 'yarik' });
-
   const changeStartDate = (isAdd: boolean) => {
     const newDate = new Date(props.startDate);
     newDate.setDate(newDate.getDate() + (isAdd ? 30 : -30));
@@ -44,9 +34,11 @@ export const TableDatePicker: FC<Props> = props => {
     props.pickEndDate(newDate);
   };
 
-  const getWeeks = async () => {
-    const data = await getDateWeek();
-    setWeeks(data);
+  const getDateRange = async (rangeType: 'weeks' | 'months' | 'quarters') => {
+    const data = await requestDateRange(rangeType);
+    props.pickRangeType(rangeType);
+    props.pickDateRange(data);
+    console.log(Object.entries(data));
   };
 
   return (
@@ -78,8 +70,10 @@ export const TableDatePicker: FC<Props> = props => {
 
         <button onClick={() => changeEndDate(true)}> {'>'} </button>
       </div>
-      <div>{weeks?.['35']}</div>
-      <button onClick={getWeeks}> week </button>
+
+      <button onClick={() => getDateRange('weeks')}> week </button>
+      <button onClick={() => getDateRange('months')}> months </button>
+      <button onClick={() => getDateRange('quarters')}> quarters </button>
     </div>
   );
 };

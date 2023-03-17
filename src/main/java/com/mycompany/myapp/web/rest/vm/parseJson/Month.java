@@ -8,11 +8,9 @@ import com.mycompany.myapp.web.rest.vm.parseJson.bean.MainTest;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.MonthData;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.TreeMap;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
@@ -40,7 +38,6 @@ public class Month {
             }
             updateValue(months, month.getName(), mainTest.getMain());
         });
-        System.out.println(months);
 
         return months;
     }
@@ -58,10 +55,9 @@ public class Month {
             System.out.println(" ##### NULL ");
             return new MonthData("x");
         } else {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
-            Date date3 = formatter.parse(StringUtils.substringBefore(date, "T"));
-            String formattedDateString = formatter.format(date3);
-            return new MonthData(formattedDateString);
+            LocalDate months = LocalDate.parse(date);
+            int month = months.getMonthValue();
+            return new MonthData(String.valueOf(month));
         }
     }
 

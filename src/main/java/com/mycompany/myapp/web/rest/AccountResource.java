@@ -116,23 +116,24 @@ public class AccountResource {
      * Тут запрос на сервер
      *
      */
+
     @Autowired
     private Month month;
 
     private Week week;
     private Quarter quarter;
 
-    @GetMapping("/Quarter")
+    @GetMapping("/quarters")
     public TreeMap<String, Integer> getQuarter() throws Exception {
         return quarter.Quarter();
     }
 
-    @GetMapping("/Month")
+    @GetMapping("/months")
     public TreeMap<String, Integer> getMonth() throws Exception {
         return month.Month();
     }
 
-    @GetMapping("/Week")
+    @GetMapping("/weeks")
     public TreeMap<String, Integer> getWeek() throws Exception {
         return week.Week();
     }

@@ -42,7 +42,6 @@ public class Week {
                 updateValueWeek(weeks, week.getName(), mainTest.getMain());
             });
 
-        System.out.println(weeks.toString());
         return weeks;
     }
 
