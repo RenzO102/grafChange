@@ -5,8 +5,11 @@ import Graf1 from 'app/modules/home/Graf1';
 import TableDatePicker, { RangeType } from 'app/modules/home/dataPick';
 
 export const Home = () => {
-  const [startDate, setStartDate] = useState(new Date('2022-01-01'));
-  const [endDate, setEndDate] = useState(new Date('2022-12-31'));
+  const now = new Date();
+  const before = new Date();
+  before.setFullYear(before.getFullYear() - 1);
+  const [startDate, setStartDate] = useState(new Date(before));
+  const [endDate, setEndDate] = useState(new Date(now));
   const [dateRange, setDateRange] = useState({});
   const [rangeType, setRangeType] = useState('weeks' as RangeType);
 

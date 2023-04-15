@@ -1,19 +1,17 @@
 package com.mycompany.myapp.web.rest.vm.parseJson.bean;
 
-public class MonthData {
+public class MainForMethods {
 
     private String name;
 
-    private int value = 0;
+    private int value;
 
-    public MonthData(String name) {
+    public MainForMethods(String name) {
         this.name = name;
     }
 
-    public MonthData addValue() {
-        value++;
-
-        return this;
+    public MainForMethods(int value) {
+        this.value = value;
     }
 
     public String getName() {
@@ -30,5 +28,10 @@ public class MonthData {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "MonthData{" + "name='" + name + '\'' + ", value=" + value + '}';
     }
 }

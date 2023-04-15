@@ -51,7 +51,6 @@ export const TableDatePicker: FC<Props> = props => {
           startDate={props.startDate}
           endDate={props.endDate}
           onSelect={props.pickStartDate}
-          dateFormat={'dd.MM.yy'}
         />
         <button onClick={() => changeStartDate(true)}> {'>'} </button>
       </div>
@@ -65,7 +64,6 @@ export const TableDatePicker: FC<Props> = props => {
           endDate={props.endDate}
           minDate={props.startDate}
           onSelect={props.pickEndDate}
-          dateFormat={'dd.MM.yy'}
         />
 
         <button onClick={() => changeEndDate(true)}> {'>'} </button>

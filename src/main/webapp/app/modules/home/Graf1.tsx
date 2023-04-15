@@ -26,8 +26,8 @@ export const Graf1: FC<Props> = props => {
         endBorder = getWeekNumber(end);
         break;
       case 'months':
-        startBorder = start.getMonth() + 1;
-        endBorder = end.getMonth() + 1;
+        startBorder = props.startDate.getMonth() + 1;
+        endBorder = props.endDate.getMonth() + 1;
         break;
       case 'quarters':
         const getQuarterNumber = (date: Date) => Math.floor((date.getMonth() + 3) / 3);

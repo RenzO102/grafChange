@@ -4,14 +4,14 @@ public class Item {
 
     private String percentY;
     private String name;
-    private int main;
+    private int value;
     private int y;
     private int z;
 
-    public Item(String percentY, String name, int main, int y, int z) {
+    public Item(String percentY, String name, int value, int y, int z) {
         this.percentY = percentY;
         this.name = name;
-        this.main = main;
+        this.value = value;
         this.y = y;
         this.z = z;
     }
@@ -32,12 +32,12 @@ public class Item {
         this.name = name;
     }
 
-    public int getMain() {
-        return main;
+    public int getValue() {
+        return value;
     }
 
-    public void setMain(int main) {
-        this.main = main;
+    public void setValue(int value) {
+        this.value = value;
     }
 
     public int getY() {
