@@ -2,14 +2,7 @@ package com.mycompany.myapp.web.rest.vm.parseJson.bean;
 
 public class QuarterFilter {
 
-    private String name;
-
     private int value;
-
-    public QuarterFilter(String name, int value) {
-        this.name = name;
-        this.value = value;
-    }
 
     public QuarterFilter(int value) {
         this.value = value;
@@ -30,6 +23,6 @@ public class QuarterFilter {
 
     @Override
     public String toString() {
-        return "Quarters of Year{" + "Year='" + name + '\'' + ", Value Of Quarters=" + value + '}';
+        return "QuarterFilter{" + "value=" + value + '}';
     }
 }

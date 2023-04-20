@@ -14,7 +14,7 @@ import com.mycompany.myapp.web.rest.vm.ManagedUserVM;
 import com.mycompany.myapp.web.rest.vm.parseJson.Month;
 import com.mycompany.myapp.web.rest.vm.parseJson.Quarter;
 import com.mycompany.myapp.web.rest.vm.parseJson.Week;
-import com.mycompany.myapp.web.rest.vm.parseJson.bean.MonthFilter;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.MonthsFilter;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.QuarterFilter;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.WeeksFilter;
 import java.security.Principal;
@@ -132,7 +132,7 @@ public class AccountResource {
     }
 
     @GetMapping("/months")
-    public Map<String, MonthFilter> getMonth() throws Exception {
+    public Map<String, MonthsFilter> getMonth() throws Exception {
         return month.Month();
     }
 

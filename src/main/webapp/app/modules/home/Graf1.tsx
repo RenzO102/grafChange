@@ -21,7 +21,7 @@ export const Graf1: FC<Props> = props => {
     switch (props.rangeType) {
       case 'weeks':
         const getWeekNumber = (date: Date) => Math.ceil(((date.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) / 7);
-        const onejan = new Date(start.getFullYear(), 0, 1);
+        const onejan = new Date(2022, 0, 1);
         startBorder = getWeekNumber(start);
         endBorder = getWeekNumber(end);
         break;

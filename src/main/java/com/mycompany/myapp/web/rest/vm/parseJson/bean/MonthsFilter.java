@@ -1,17 +1,10 @@
 package com.mycompany.myapp.web.rest.vm.parseJson.bean;
 
-public class MonthFilter {
-
-    private String name;
+public class MonthsFilter {
 
     private int value;
 
-    public MonthFilter(String name, int value) {
-        this.name = name;
-        this.value = value;
-    }
-
-    public MonthFilter(int value) {
+    public MonthsFilter(int value) {
         this.value = value;
     }
 
@@ -23,13 +16,13 @@ public class MonthFilter {
         this.value = value;
     }
 
-    public MonthFilter addValue(MainForMethods name) {
+    public MonthsFilter addValue(MainForMethods name) {
         value = value + name.getValue();
         return this;
     }
 
     @Override
     public String toString() {
-        return "Month of Year{" + "Year='" + name + '\'' + ", Value Of Month=" + value + '}';
+        return "MonthsFilter{" + "value=" + value + '}';
     }
 }

@@ -8,10 +8,10 @@ import com.mycompany.myapp.web.rest.vm.parseJson.bean.MainForMethods;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.QuarterFilter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.*;
-import org.apache.commons.lang3.StringUtils;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Quarter {
 
@@ -33,10 +33,10 @@ public class Quarter {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                if (quarters.containsKey(quarter.getName())) {
-                    quarters.get(quarter.getName()).addValue(value);
+                if (quarters.containsKey(quarter.getName() + "/" + year.getName())) {
+                    quarters.get(quarter.getName() + "/" + year.getName()).addValue(value);
                 } else {
-                    quarters.put(quarter.getName(), new QuarterFilter(year.getName(), value.getValue()));
+                    quarters.put(quarter.getName() + "/" + year.getName(), new QuarterFilter(value.getValue()));
                 }
             });
         return quarters;
@@ -56,15 +56,14 @@ public class Quarter {
         }
     }
 
-    private static MainForMethods getYear(String date) throws Exception {
+    private static MainForMethods getYear(String date) {
         if (Strings.isNullOrEmpty(date)) {
             System.out.println(" ##### NULL ");
             return new MainForMethods("x");
         } else {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
-            Date date3 = formatter.parse(StringUtils.substringBefore(date, "T"));
-            String formattedDateString = formatter.format(date3);
-            return new MainForMethods(formattedDateString);
+            LocalDate day = LocalDate.parse(date);
+            int year = day.getYear();
+            return new MainForMethods(String.valueOf(year));
         }
     }
 

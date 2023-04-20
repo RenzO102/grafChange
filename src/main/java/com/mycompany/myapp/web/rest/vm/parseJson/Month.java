@@ -3,9 +3,7 @@ package com.mycompany.myapp.web.rest.vm.parseJson;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mycompany.myapp.web.rest.vm.parseJson.bean.Item;
-import com.mycompany.myapp.web.rest.vm.parseJson.bean.MainForMethods;
-import com.mycompany.myapp.web.rest.vm.parseJson.bean.MonthFilter;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -17,11 +15,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Month {
 
-    public static Map<String, MonthFilter> Month() throws Exception {
+    public static Map<String, MonthsFilter> Month() throws Exception {
         List<Item> items = new Gson()
             .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
-        Map<String, MonthFilter> months = new HashMap<>();
+        Map<String, MonthsFilter> months = new HashMap<>();
         items
             .stream()
             .forEach(i -> {
@@ -35,10 +33,10 @@ public class Month {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                if (months.containsKey(month.getName())) {
-                    months.get(month.getName()).addValue(value);
+                if (months.containsKey(month.getName() + "/" + year.getName())) {
+                    months.get(month.getName() + "-" + year.getName()).addValue(value);
                 } else {
-                    months.put(month.getName(), new MonthFilter(year.getName(), value.getValue()));
+                    months.put(month.getName() + "-" + year.getName(), new MonthsFilter(month.getValue()));
                 }
             });
         return months;
