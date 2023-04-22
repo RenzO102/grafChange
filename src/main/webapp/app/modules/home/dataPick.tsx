@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-
+import React, { FC, useState } from 'react';
+import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -8,7 +8,16 @@ interface Props {
   pickStartDate: (date: Date) => void;
   endDate: Date;
   pickEndDate: (date: Date) => void;
+  pickDateRange: (range: any) => void;
+  pickRangeType: (type: RangeType) => void;
 }
+
+export type RangeType = 'weeks' | 'months' | 'quarters';
+
+const requestDateRange = async (rangeType: RangeType) => {
+  const response = await axios.get<any>(`/api/${rangeType}`);
+  return response.data;
+};
 
 export const TableDatePicker: FC<Props> = props => {
   const changeStartDate = (isAdd: boolean) => {
@@ -25,6 +34,13 @@ export const TableDatePicker: FC<Props> = props => {
     props.pickEndDate(newDate);
   };
 
+  const getDateRange = async (rangeType: 'weeks' | 'months' | 'quarters') => {
+    const data = await requestDateRange(rangeType);
+    props.pickRangeType(rangeType);
+    props.pickDateRange(data);
+    console.log(Object.entries(data));
+  };
+
   return (
     <div style={{ display: 'inline-grid' }}>
       <div style={{ marginBottom: 20, display: 'inline-flex' }}>
@@ -35,7 +51,6 @@ export const TableDatePicker: FC<Props> = props => {
           startDate={props.startDate}
           endDate={props.endDate}
           onSelect={props.pickStartDate}
-          dateFormat={'dd.MM.yy'}
         />
         <button onClick={() => changeStartDate(true)}> {'>'} </button>
       </div>
@@ -49,10 +64,14 @@ export const TableDatePicker: FC<Props> = props => {
           endDate={props.endDate}
           minDate={props.startDate}
           onSelect={props.pickEndDate}
-          dateFormat={'dd.MM.yy'}
         />
+
         <button onClick={() => changeEndDate(true)}> {'>'} </button>
       </div>
+
+      <button onClick={() => getDateRange('weeks')}> week </button>
+      <button onClick={() => getDateRange('months')}> months </button>
+      <button onClick={() => getDateRange('quarters')}> quarters </button>
     </div>
   );
 };

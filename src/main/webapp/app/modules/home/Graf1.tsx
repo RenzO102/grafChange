@@ -1,82 +1,53 @@
 import React, { FC, useEffect, useState } from 'react';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
+import { RangeType } from 'app/modules/home/dataPick';
 
 interface Props {
   startDate: Date;
   endDate: Date;
+  dateRange: {};
+  rangeType: RangeType;
 }
 
-const getDateMonth = month => {
-  axios.get<any>('/api/monthName').then(response => {
-    console.log(response);
-    month(response);
-  });
-};
-
-const getDateQuarter = quarter => {
-  axios.get<any>(`/api/admin/quarterName`).then(response => {
-    console.log(response);
-    quarter(response);
-  });
-};
-
-export const data = [
-  {
-    date: '2022-11-11',
-    yandex: 4000,
-    mail: 2400,
-    amt: 2400,
-  },
-  {
-    date: '2022-12-27',
-    yandex: 3000,
-    mail: 1398,
-    amt: 2210,
-  },
-  {
-    date: '2022-12-28',
-    yandex: 2000,
-    mail: 9800,
-    amt: 2290,
-  },
-  {
-    date: '2022-12-29',
-    yandex: 2780,
-    mail: 3908,
-    amt: 2000,
-  },
-  {
-    date: '2022-12-30',
-    yandex: 1890,
-    mail: 4800,
-    amt: 2181,
-  },
-  {
-    date: '2023-01-27',
-    yandex: 2390,
-    mail: 3800,
-    amt: 2500,
-  },
-  {
-    date: '2023-01-29',
-    yandex: 3490,
-    mail: 4300,
-    amt: 2100,
-  },
-];
-
-const isInDateInterval = (start: Date, end: Date, myDate: Date): boolean => myDate > start && myDate < end;
-
 export const Graf1: FC<Props> = props => {
-  const onClickG = () => window.open('https://yandex.ru');
-  const onClickYa = () => window.open(' https://mail.ru/');
-  const dataInterval = data.filter(d => isInDateInterval(props.startDate, props.endDate, new Date(d.date)));
+  const onClickYandex = () => window.open('https://yandex.ru');
+
+  const isInDateInterval = (start: Date, end: Date, myDate: string): boolean => {
+    const currStep = +myDate;
+
+    let startBorder, endBorder: number;
+
+    switch (props.rangeType) {
+      case 'weeks':
+        const getWeekNumber = (date: Date) => Math.ceil(((date.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) / 7);
+        const onejan = new Date(2022, 0, 1);
+        startBorder = getWeekNumber(start);
+        endBorder = getWeekNumber(end);
+        break;
+      case 'months':
+        startBorder = props.startDate.getMonth() + 1;
+        endBorder = props.endDate.getMonth() + 1;
+        break;
+      case 'quarters':
+        const getQuarterNumber = (date: Date) => Math.floor((date.getMonth() + 3) / 3);
+        startBorder = getQuarterNumber(start);
+        endBorder = getQuarterNumber(end);
+        break;
+    }
+    return currStep >= startBorder && currStep <= endBorder;
+  };
+
+  const convertToArray = data => {
+    const dateArray = Object.keys(data).map(key => ({ date: key, people: data[key] }));
+    return dateArray.filter(d => isInDateInterval(props.startDate, props.endDate, d.date));
+  };
+
   return (
     <BarChart
-      width={500}
-      height={300}
-      data={dataInterval}
+      width={1000}
+      height={450}
+      data={convertToArray(props.dateRange)}
       margin={{
         top: 20,
         right: 30,
@@ -85,13 +56,12 @@ export const Graf1: FC<Props> = props => {
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="date" />
+      <XAxis dataKey="date" minTickGap={-200} />
       <YAxis />
       <YAxis />
       <Legend />
       <Tooltip />
-      <Bar dataKey="yandex" stackId="a" fill="#8884d8" onClick={onClickG} />
-      <Bar dataKey="mail" stackId="a" fill="#82ca9d" onClick={onClickYa} />
+      <Bar dataKey="people" stackId="a" fill="#8884d8" onClick={onClickYandex} />
     </BarChart>
   );
 };

@@ -14,7 +14,11 @@ import com.mycompany.myapp.web.rest.vm.ManagedUserVM;
 import com.mycompany.myapp.web.rest.vm.parseJson.Month;
 import com.mycompany.myapp.web.rest.vm.parseJson.Quarter;
 import com.mycompany.myapp.web.rest.vm.parseJson.Week;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.MonthsFilter;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.QuarterFilter;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.WeeksFilter;
 import java.security.Principal;
+import java.util.Map;
 import java.util.Objects;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -113,26 +117,28 @@ public class AccountResource {
 
     /**
      * Тут запрос на сервер
+     *
      */
+
     @Autowired
     private Month month;
 
     private Week week;
     private Quarter quarter;
 
-    @GetMapping("/Quarter")
-    public Quarter getQuarter() throws Exception {
-        return quarter.main();
+    @GetMapping("/quarters")
+    public Map<String, QuarterFilter> getQuarter() throws Exception {
+        return quarter.Quarter();
     }
 
-    @GetMapping("/Month")
-    public Month getMonth() throws Exception {
-        return month.main();
+    @GetMapping("/months")
+    public Map<String, MonthsFilter> getMonth() throws Exception {
+        return month.Month();
     }
 
-    @GetMapping("/Week")
-    public Week getWeek() throws Exception {
-        return week.main();
+    @GetMapping("/weeks")
+    public Map<String, WeeksFilter> getWeek() throws Exception {
+        return week.Week();
     }
 
     /**
