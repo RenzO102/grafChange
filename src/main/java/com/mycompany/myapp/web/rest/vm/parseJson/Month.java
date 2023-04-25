@@ -1,70 +1,79 @@
 package com.mycompany.myapp.web.rest.vm.parseJson;
 
 import com.google.common.base.Strings;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.mycompany.myapp.web.rest.vm.parseJson.bean.*;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.DateSelecetMethod;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.Item;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsMonth;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Month {
 
-    public static Map<String, MonthsFilter> Month() throws Exception {
+    public static List<OptionsMonth> Month() throws Exception {
         List<Item> items = new Gson()
             .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
-        Map<String, MonthsFilter> months = new HashMap<>();
+        var months = new ArrayList<OptionsMonth>();
         items
             .stream()
             .forEach(i -> {
-                MainForMethods month;
-                MainForMethods value;
-                MainForMethods year;
+                DateSelecetMethod month;
+                DateSelecetMethod MonthValue;
+                DateSelecetMethod year;
                 try {
                     month = getMoths(i.getName());
-                    value = getValue(i.getValue());
+                    MonthValue = getValue(i.getValue());
                     year = getYear(i.getName());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                if (months.containsKey(month.getName() + "/" + year.getName())) {
-                    months.get(month.getName() + "-" + year.getName()).addValue(value);
-                } else {
-                    months.put(month.getName() + "-" + year.getName(), new MonthsFilter(month.getValue()));
+                var hasMonthData = new AtomicBoolean(false);
+                var optionsMonth = new OptionsMonth(MonthValue.getValue(), year.getName(), month.getName());
+                months.forEach(wd -> {
+                    if (Objects.equals(wd.key(), optionsMonth.key())) {
+                        wd.addValue(MonthValue);
+                        hasMonthData.set(true);
+                    }
+                });
+                if (!hasMonthData.get()) {
+                    months.add(optionsMonth);
                 }
             });
         return months;
     }
 
-    private static MainForMethods getYear(String date) {
+    private static DateSelecetMethod getYear(String date) {
         if (Strings.isNullOrEmpty(date)) {
             System.out.println(" ##### NULL ");
-            return new MainForMethods("x");
+            return new DateSelecetMethod("x");
         } else {
             LocalDate day = LocalDate.parse(date);
             int year = day.getYear();
-            return new MainForMethods(String.valueOf(year));
+            return new DateSelecetMethod(String.valueOf(year));
         }
     }
 
-    private static MainForMethods getValue(int value) throws NullPointerException {
-        return new MainForMethods(value);
+    private static DateSelecetMethod getValue(int value) throws NullPointerException {
+        return new DateSelecetMethod(value);
     }
 
-    public static MainForMethods getMoths(String date) throws Exception {
+    public static DateSelecetMethod getMoths(String date) throws Exception {
         if (Strings.isNullOrEmpty(date)) {
             System.out.println(" ##### NULL ");
-            return new MainForMethods("x");
+            return new DateSelecetMethod("x");
         } else {
             LocalDate months = LocalDate.parse(date);
             int month = months.getMonthValue();
-            return new MainForMethods(String.valueOf(month));
+            return new DateSelecetMethod(String.valueOf(month));
         }
     }
 }

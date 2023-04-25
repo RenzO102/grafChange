@@ -1,16 +1,16 @@
 package com.mycompany.myapp.web.rest.vm.parseJson.bean;
 
-public class MainForMethods {
+public class DateSelecetMethod {
 
     private String name;
 
     private int value;
 
-    public MainForMethods(String name) {
+    public DateSelecetMethod(String name) {
         this.name = name;
     }
 
-    public MainForMethods(int value) {
+    public DateSelecetMethod(int value) {
         this.value = value;
     }
 
@@ -28,10 +28,5 @@ public class MainForMethods {
 
     public void setValue(int value) {
         this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return "MonthData{" + "name='" + name + '\'' + ", value=" + value + '}';
     }
 }

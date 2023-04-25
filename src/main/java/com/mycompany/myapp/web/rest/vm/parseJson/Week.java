@@ -1,30 +1,35 @@
 package com.mycompany.myapp.web.rest.vm.parseJson;
 
 import com.google.common.base.Strings;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.DateSelecetMethod;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.Item;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsWeeks;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Week {
 
-    public static Map<String, WeeeksFilter> Week() throws Exception {
+    public static List<OptionsWeeks> Week() throws Exception {
         List<Item> items = new Gson()
             .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
-        Map<String, WeeksFilter> weeks = new HashMap<>();
+        var weeks = new ArrayList<OptionsWeeks>();
         items
             .stream()
             .forEach(i -> {
-                MainForMethods week;
-                MainForMethods value;
-                MainForMethods year;
+                DateSelecetMethod week;
+                DateSelecetMethod value;
+                DateSelecetMethod year;
                 try {
                     week = getWeek(i.getName());
                     value = getValue(i.getValue());
@@ -32,40 +37,46 @@ public class Week {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                if (weeks.containsKey(week.getName() + "/" + year.getName())) {
-                    weeks.get(week.getName() + "/" + year.getName()).addValue(value);
-                } else {
-                    weeks.put(week.getName() + "/" + year.getName(), new WeeksFilter(value.getValue()));
+                var hasWeekData = new AtomicBoolean(false);
+                var optionsWeeks = new OptionsWeeks(value.getValue(), year.getName(), week.getName());
+                weeks.forEach(wd -> {
+                    if (Objects.equals(wd.key(), optionsWeeks.key())) {
+                        wd.addValue(value);
+                        hasWeekData.set(true);
+                    }
+                });
+                if (!hasWeekData.get()) {
+                    weeks.add(optionsWeeks);
                 }
             });
         return weeks;
     }
 
-    private static MainForMethods getYear(String date) {
+    private static DateSelecetMethod getYear(String date) {
         if (Strings.isNullOrEmpty(date)) {
             System.out.println(" ##### NULL ");
-            return new MainForMethods("x");
+            return new DateSelecetMethod("x");
         } else {
             LocalDate day = LocalDate.parse(date);
             int year = day.getYear();
-            return new MainForMethods(String.valueOf(year));
+            return new DateSelecetMethod(String.valueOf(year));
         }
     }
 
-    private static MainForMethods getWeek(String date) {
+    private static DateSelecetMethod getWeek(String date) {
         if (Strings.isNullOrEmpty(date)) {
             System.out.println(" ##### NULL ");
-            return new MainForMethods("x");
+            return new DateSelecetMethod("x");
         } else {
             WeekFields weekFields = WeekFields.of(DayOfWeek.SUNDAY, 1);
             TemporalField weekOfWeekBasedYear = weekFields.weekOfWeekBasedYear();
             LocalDate day = LocalDate.parse(date);
             int week = day.get(weekOfWeekBasedYear);
-            return new MainForMethods(String.valueOf(week));
+            return new DateSelecetMethod(String.valueOf(week));
         }
     }
 
-    private static MainForMethods getValue(int main) throws NullPointerException {
-        return new MainForMethods(main);
+    private static DateSelecetMethod getValue(int main) throws NullPointerException {
+        return new DateSelecetMethod(main);
     }
 }

@@ -3,71 +3,78 @@ package com.mycompany.myapp.web.rest.vm.parseJson;
 import com.google.common.base.Strings;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.DateSelecetMethod;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.Item;
-import com.mycompany.myapp.web.rest.vm.parseJson.bean.MainForMethods;
-import com.mycompany.myapp.web.rest.vm.parseJson.bean.QuarterFilter;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsQuarters;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Quarter {
 
-    public static Map<String, QuarterFilter> Quarter() throws Exception {
+    public List<OptionsQuarters> Quarter() throws Exception {
         List<Item> items = new Gson()
             .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
-        Map<String, QuarterFilter> quarters = new HashMap<>();
+        var quarters = new ArrayList<OptionsQuarters>();
         items
             .stream()
             .forEach(i -> {
-                MainForMethods quarter;
-                MainForMethods value;
-                MainForMethods year;
+                DateSelecetMethod quarter;
+                DateSelecetMethod QuarterValue;
+                DateSelecetMethod year;
                 try {
                     quarter = getQuarter(i.getName());
-                    value = getValue(i.getValue());
+                    QuarterValue = getValue(i.getValue());
                     year = getYear(i.getName());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                if (quarters.containsKey(quarter.getName() + "/" + year.getName())) {
-                    quarters.get(quarter.getName() + "/" + year.getName()).addValue(value);
-                } else {
-                    quarters.put(quarter.getName() + "/" + year.getName(), new QuarterFilter(value.getValue()));
+                var hasQuarterData = new AtomicBoolean(false);
+                var optionsQuaters = new OptionsQuarters(QuarterValue.getValue(), year.getName(), quarter.getName());
+                quarters.forEach(wd -> {
+                    if (Objects.equals(wd.key(), optionsQuaters.key())) {
+                        wd.addValue(QuarterValue);
+                        hasQuarterData.set(true);
+                    }
+                });
+                if (!hasQuarterData.get()) {
+                    quarters.add(optionsQuaters);
                 }
             });
         return quarters;
     }
 
-    private static MainForMethods getQuarter(String date) throws Exception {
+    private static DateSelecetMethod getQuarter(String date) throws Exception {
         if (Strings.isNullOrEmpty(date)) {
             System.out.println(" ##### NULL ");
-            return new MainForMethods("x");
+            return new DateSelecetMethod("x");
         } else {
             LocalDate date1 = LocalDate.parse(date);
             int Month = date1.getMonthValue();
             int quarter;
             if (Month < 4) quarter = 1; else if (Month >= 4 && Month < 7) quarter = 2; else if (Month >= 7 && Month < 10) quarter =
                 3; else quarter = 4;
-            return new MainForMethods(String.valueOf(quarter));
+            return new DateSelecetMethod(String.valueOf(quarter));
         }
     }
 
-    private static MainForMethods getYear(String date) {
+    private static DateSelecetMethod getYear(String date) {
         if (Strings.isNullOrEmpty(date)) {
             System.out.println(" ##### NULL ");
-            return new MainForMethods("x");
+            return new DateSelecetMethod("x");
         } else {
             LocalDate day = LocalDate.parse(date);
             int year = day.getYear();
-            return new MainForMethods(String.valueOf(year));
+            return new DateSelecetMethod(String.valueOf(year));
         }
     }
 
-    private static MainForMethods getValue(int main) throws NullPointerException {
-        return new MainForMethods(main);
+    private static DateSelecetMethod getValue(int main) throws NullPointerException {
+        return new DateSelecetMethod(main);
     }
 }

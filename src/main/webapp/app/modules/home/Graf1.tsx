@@ -12,9 +12,9 @@ interface Props {
 
 export const Graf1: FC<Props> = props => {
   const onClickYandex = () => window.open('https://yandex.ru');
-
   const isInDateInterval = (start: Date, end: Date, myDate: string): boolean => {
     const currStep = +myDate;
+    const [year, weekNumber] = myDate.split('/');
 
     let startBorder, endBorder: number;
 
@@ -39,7 +39,8 @@ export const Graf1: FC<Props> = props => {
   };
 
   const convertToArray = data => {
-    const dateArray = Object.keys(data).map(key => ({ date: key, people: data[key] }));
+    const dateArray = Object.keys(data).map(key => ({ date: data[key].weekNumber, value: data[key].value }));
+    console.log(data, dateArray);
     return dateArray.filter(d => isInDateInterval(props.startDate, props.endDate, d.date));
   };
 
@@ -61,7 +62,7 @@ export const Graf1: FC<Props> = props => {
       <YAxis />
       <Legend />
       <Tooltip />
-      <Bar dataKey="people" stackId="a" fill="#8884d8" onClick={onClickYandex} />
+      <Bar dataKey="value" stackId="a" fill="#8884d8" onClick={onClickYandex} />
     </BarChart>
   );
 };
