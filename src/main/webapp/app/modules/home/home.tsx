@@ -1,7 +1,7 @@
 import './home.scss';
 import React, { useState } from 'react';
 import { Row, Col } from 'reactstrap';
-import Graf1 from 'app/modules/home/Graf1';
+import GraphicPainter from 'app/modules/home/GraphicPainter';
 import TableDatePicker, { RangeType } from 'app/modules/home/dataPick';
 
 export const Home = () => {
@@ -26,7 +26,7 @@ export const Home = () => {
         />
       </Col>
       <Col>
-        <Graf1 startDate={startDate} endDate={endDate} dateRange={dateRange} rangeType={rangeType} />
+        <GraphicPainter startDate={startDate} endDate={endDate} dateRange={dateRange} rangeType={rangeType} />
       </Col>
     </Row>
   );

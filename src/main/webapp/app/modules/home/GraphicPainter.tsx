@@ -12,10 +12,12 @@ interface Props {
 
 export const Graf1: FC<Props> = props => {
   const onClickYandex = () => window.open('https://yandex.ru');
-  const isInDateInterval = (start: Date, end: Date, number: string, year: string): boolean => {
+  const isInDateInterval = (start: Date, end: Date, number: string, year: string): any => {
     const currYear = +year;
     const diffYear = currYear - start.getFullYear();
-    const currStep = +number + diffYear * 52;
+    const currStepWeek = +number + diffYear * 52;
+    const currStepMonth = +number + diffYear * 12;
+    const currStepQuarter = +number + diffYear * 4;
 
     let startBorder, endBorder: number;
 
@@ -26,20 +28,24 @@ export const Graf1: FC<Props> = props => {
         const onejan = (date: Date) => new Date(start.getFullYear(), 0, 1);
         startBorder = getWeekNumber(start);
         endBorder = getWeekNumber(end);
-        console.log(startBorder, endBorder, start.getFullYear(), end.getFullYear(), currYear, currStep);
+        console.log(startBorder, endBorder, currStepWeek);
+        return currStepWeek >= startBorder && currStepWeek <= endBorder;
         break;
       case 'months':
-        startBorder = props.startDate.getMonth() + 1;
-        endBorder = props.endDate.getMonth() + 1;
+        startBorder = props.startDate.getMonth();
+        endBorder = props.endDate.getMonth() + 12;
+        console.log(startBorder, endBorder, currStepMonth);
+        return currStepMonth >= startBorder && currStepMonth <= endBorder;
         break;
       case 'quarters':
         const getQuarterNumber = (date: Date) => Math.floor((date.getMonth() + 3) / 3);
         startBorder = getQuarterNumber(start);
-        endBorder = getQuarterNumber(end);
+        endBorder = getQuarterNumber(end) + 4;
+        console.log(startBorder, endBorder, currStepQuarter);
+        return currStepQuarter >= startBorder && currStepQuarter <= endBorder;
         break;
     }
-    return currStep >= startBorder && currStep <= endBorder;
-
+    // return return currStepWeek >= startBorder && currStepWeek <= endBorder;
     // weekNumber1 =19 , year = 2022 , weekNumber2= 71 , year = 2023, currStep= 55, currYear=2023
   };
 

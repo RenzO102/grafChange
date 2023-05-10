@@ -12,10 +12,8 @@ import com.mycompany.myapp.web.rest.errors.LoginAlreadyUsedException;
 import com.mycompany.myapp.web.rest.vm.KeyAndPasswordVM;
 import com.mycompany.myapp.web.rest.vm.ManagedUserVM;
 import com.mycompany.myapp.web.rest.vm.parseJson.Month;
-import com.mycompany.myapp.web.rest.vm.parseJson.Quarter;
 import com.mycompany.myapp.web.rest.vm.parseJson.Week;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsMonth;
-import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsQuarters;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsWeeks;
 import java.security.Principal;
 import java.util.List;
@@ -124,12 +122,13 @@ public class AccountResource {
     private Month month;
 
     private Week week;
-    private Quarter quarter;
 
-    @GetMapping("/quarters")
-    public List<OptionsQuarters> getQuarter() throws Exception {
-        return quarter.Quarter();
-    }
+    //    private Quarters quarters;
+    //
+    //    @GetMapping("/quarters")
+    //    public List<OptionsQuarters> getQuarter() throws Exception {
+    //        return quarters.Quarters();
+    //    }
 
     @GetMapping("/months")
     public List<OptionsMonth> getMonth() throws Exception {

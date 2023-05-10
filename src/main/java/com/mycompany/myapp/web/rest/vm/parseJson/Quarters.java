@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-public class Quarter {
+@SpringBootApplication
+public class Quarters {
 
-    public List<OptionsQuarters> Quarter() throws Exception {
+    public List<OptionsQuarters> Quarters() throws Exception {
         List<Item> items = new Gson()
             .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
