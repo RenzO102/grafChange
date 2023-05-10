@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Quarters {
+public class Quarter {
 
     public List<OptionsQuarters> Quarters() throws Exception {
         List<Item> items = new Gson()

@@ -2,7 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.UserDTO;
-import com.mycompany.myapp.web.rest.vm.parseJson.Quarters;
+import com.mycompany.myapp.web.rest.vm.parseJson.Quarter;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsQuarters;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +65,7 @@ public class PublicUserResource {
     }
 
     @Autowired
-    private Quarters quarters;
+    private Quarter quarters;
 
     @GetMapping("/quarters")
     public List<OptionsQuarters> getQuarter() throws Exception {
