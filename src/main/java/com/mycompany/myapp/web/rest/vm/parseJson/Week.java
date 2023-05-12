@@ -14,40 +14,38 @@ import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Optional;
 
 public class Week {
 
-    public static List<OptionsWeeks> Week() throws Exception {
+    public List<OptionsWeeks> week() throws Exception {
         List<Item> items = new Gson()
             .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
-        var weeks = new ArrayList<OptionsWeeks>();
-        items
-            .stream()
+        List<OptionsWeeks> weeks = new ArrayList<>();
+        items.stream()
             .forEach(i -> {
-                DateSelecetMethod week;
-                DateSelecetMethod value;
-                DateSelecetMethod year;
+                OptionsWeeks optionsWeeks;
                 try {
-                    week = getWeek(i.getName());
-                    value = getValue(i.getValue());
-                    year = getYear(i.getName());
+                    optionsWeeks = OptionsWeeks.week()
+                        .setWeekNumber(getWeek(i.getName()).getName())
+                       .setYear(getYear(i.getName()).getName())
+                        .setValue(getValue(i.getValue()).getValue());
+
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                var hasWeekData = new AtomicBoolean(false);
-                var optionsWeeks = new OptionsWeeks(value.getValue(), year.getName(), week.getName());
-                weeks.forEach(wd -> {
-                    if (Objects.equals(wd.key(), optionsWeeks.key())) {
-                        wd.addValue(value);
-                        hasWeekData.set(true);
-                    }
-                });
-                if (!hasWeekData.get()) {
+
+                Optional<OptionsWeeks> week1 =  weeks.stream()
+                    .filter(wk -> wk.key().equals(optionsWeeks.key()))
+                    .findFirst();
+
+                if (week1.isPresent()) {
+                    week1.get().addValue(optionsWeeks.getValue());
+                } else {
                     weeks.add(optionsWeeks);
                 }
+
             });
         return weeks;
     }

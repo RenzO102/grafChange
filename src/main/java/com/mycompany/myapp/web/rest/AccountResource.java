@@ -137,7 +137,7 @@ public class AccountResource {
 
     @GetMapping("/weeks")
     public List<OptionsWeeks> getWeek() throws Exception {
-        return week.Week();
+        return week.week();
     }
 
     /**

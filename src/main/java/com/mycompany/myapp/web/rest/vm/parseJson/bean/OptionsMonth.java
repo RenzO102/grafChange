@@ -3,27 +3,29 @@ package com.mycompany.myapp.web.rest.vm.parseJson.bean;
 public class OptionsMonth {
 
     private int value;
-
     private String year;
+    private String monthNumber;
 
-    private String weekNumber;
-
-    public OptionsMonth(int value, String year, String weekNumber) {
+    public OptionsMonth() {
         this.value = value;
         this.year = year;
-        this.weekNumber = weekNumber;
+        this.monthNumber = monthNumber();
+    }
+
+    public static OptionsMonth month(){
+        return new OptionsMonth();
     }
 
     public String key() {
-        return weekNumber + "/" + year;
+        return monthNumber + "/" + year;
     }
 
     public int value() {
         return value;
     }
 
-    public String weekNumber() {
-        return weekNumber;
+    public String monthNumber() {
+        return monthNumber;
     }
 
     public String year() {
@@ -34,28 +36,31 @@ public class OptionsMonth {
         return value;
     }
 
-    public void setValue(int value) {
+    public OptionsMonth setValue(int value) {
         this.value = value;
+        return this;
     }
 
-    public String getWeekNumber() {
-        return weekNumber;
+    public String getMonthNumber() {
+        return monthNumber;
     }
 
-    public void setWeekNumber(String weekNumber) {
-        this.weekNumber = weekNumber;
+    public OptionsMonth setMonthNumber(String monthNumber) {
+        this.monthNumber = monthNumber;
+        return this;
     }
 
     public String getYear() {
         return year;
     }
 
-    public void setYear(String year) {
+    public OptionsMonth setYear(String year) {
         this.year = year;
+        return this;
     }
 
-    public OptionsMonth addValue(DateSelecetMethod name) {
-        value = value + name.getValue();
+    public OptionsMonth addValue(int name) {
+        value = value + name;
         return this;
     }
 }

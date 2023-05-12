@@ -6,13 +6,17 @@ import com.google.gson.Gson;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.DateSelecetMethod;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.Item;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsQuarters;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsWeeks;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
@@ -20,33 +24,33 @@ public class Quarter {
 
     public List<OptionsQuarters> Quarters() throws Exception {
         List<Item> items = new Gson()
-            .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
+            .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {
+            }.getType());
 
-        var quarters = new ArrayList<OptionsQuarters>();
-        items
-            .stream()
+        List<OptionsQuarters> quarters = new ArrayList<>();
+        items.stream()
             .forEach(i -> {
-                DateSelecetMethod quarter;
-                DateSelecetMethod QuarterValue;
-                DateSelecetMethod year;
+                OptionsQuarters optionsQuarters;
                 try {
-                    quarter = getQuarter(i.getName());
-                    QuarterValue = getValue(i.getValue());
-                    year = getYear(i.getName());
+                    optionsQuarters = OptionsQuarters.quarter()
+                        .setQuarterNumber(getQuarter(i.getName()).getName())
+                        .setYear(getYear(i.getName()).getName())
+                        .setValue(getValue(i.getValue()).getValue());
+
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                var hasQuarterData = new AtomicBoolean(false);
-                var optionsQuaters = new OptionsQuarters(QuarterValue.getValue(), year.getName(), quarter.getName());
-                quarters.forEach(wd -> {
-                    if (Objects.equals(wd.key(), optionsQuaters.key())) {
-                        wd.addValue(QuarterValue);
-                        hasQuarterData.set(true);
-                    }
-                });
-                if (!hasQuarterData.get()) {
-                    quarters.add(optionsQuaters);
+
+                Optional<OptionsQuarters> quarter = quarters.stream()
+                    .filter(qk -> qk.key().equals(optionsQuarters.key()))
+                    .findFirst();
+
+                if (quarter.isPresent()) {
+                    quarter.get().addValue(optionsQuarters.getValue());
+                } else {
+                    quarters.add(optionsQuarters);
                 }
+
             });
         return quarters;
     }
@@ -59,8 +63,13 @@ public class Quarter {
             LocalDate date1 = LocalDate.parse(date);
             int Month = date1.getMonthValue();
             int quarter;
-            if (Month < 4) quarter = 1; else if (Month >= 4 && Month < 7) quarter = 2; else if (Month >= 7 && Month < 10) quarter =
-                3; else quarter = 4;
+            if (Month < 4) {
+                quarter = 1;
+            } else if (Month < 7) {
+                quarter = 2;
+            } else if (Month < 10) {
+                quarter = 3;
+            } else quarter = 4;
             return new DateSelecetMethod(String.valueOf(quarter));
         }
     }

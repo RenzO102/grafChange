@@ -12,7 +12,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsWeeks;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
@@ -22,31 +25,29 @@ public class Month {
         List<Item> items = new Gson()
             .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
-        var months = new ArrayList<OptionsMonth>();
-        items
-            .stream()
+        List<OptionsMonth> months = new ArrayList<>();
+        items.stream()
             .forEach(i -> {
-                DateSelecetMethod month;
-                DateSelecetMethod MonthValue;
-                DateSelecetMethod year;
+                OptionsMonth optionsMonth;
                 try {
-                    month = getMoths(i.getName());
-                    MonthValue = getValue(i.getValue());
-                    year = getYear(i.getName());
+                    optionsMonth = OptionsMonth.month()
+                        .setMonthNumber(getMoths(i.getName()).getName())
+                        .setYear(getYear(i.getName()).getName())
+                        .setValue(getValue(i.getValue()).getValue());
+
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                var hasMonthData = new AtomicBoolean(false);
-                var optionsMonth = new OptionsMonth(MonthValue.getValue(), year.getName(), month.getName());
-                months.forEach(wd -> {
-                    if (Objects.equals(wd.key(), optionsMonth.key())) {
-                        wd.addValue(MonthValue);
-                        hasMonthData.set(true);
-                    }
-                });
-                if (!hasMonthData.get()) {
+                Optional<OptionsMonth> month =  months.stream()
+                    .filter(mk -> mk.key().equals(optionsMonth.key()))
+                    .findFirst();
+
+                if (month.isPresent()) {
+                    month.get().addValue(optionsMonth.getValue());
+                } else {
                     months.add(optionsMonth);
                 }
+
             });
         return months;
     }

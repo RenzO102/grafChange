@@ -3,7 +3,6 @@ package com.mycompany.myapp.web.rest.vm.parseJson.bean;
 public class DateSelecetMethod {
 
     private String name;
-
     private int value;
 
     public DateSelecetMethod(String name) {
