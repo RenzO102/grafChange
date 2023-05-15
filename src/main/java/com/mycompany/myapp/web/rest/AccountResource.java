@@ -118,28 +118,6 @@ public class AccountResource {
      *
      */
 
-    @Autowired
-    private Month month;
-
-    private Week week;
-
-    //    private Quarters quarters;
-    //
-    //    @GetMapping("/quarters")
-    //    public List<OptionsQuarters> getQuarter() throws Exception {
-    //        return quarters.Quarters();
-    //    }
-
-    @GetMapping("/months")
-    public List<OptionsMonth> getMonth() throws Exception {
-        return month.Month();
-    }
-
-    @GetMapping("/weeks")
-    public List<OptionsWeeks> getWeek() throws Exception {
-        return week.week();
-    }
-
     /**
      * {@code POST  /account} : update the current user information.
      *

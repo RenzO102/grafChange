@@ -4,20 +4,20 @@ public class OptionsWeeks {
 
     private int value;
     private String year;
-    private String weekNumber;
+    private String Number;
 
     public OptionsWeeks() {
         this.value = value;
         this.year = year;
-        this.weekNumber = weekNumber;
+        this.Number = Number;
     }
 
-    public static OptionsWeeks week(){
+    public static OptionsWeeks week() {
         return new OptionsWeeks();
     }
 
     public String key() {
-        return weekNumber + "/" + year;
+        return Number + "/" + year;
     }
 
     public int getValue() {
@@ -38,12 +38,12 @@ public class OptionsWeeks {
         return this;
     }
 
-    public String getWeekNumber() {
-        return weekNumber;
+    public String getNumber() {
+        return Number;
     }
 
-    public OptionsWeeks setWeekNumber(String weekNumber) {
-        this.weekNumber = weekNumber;
+    public OptionsWeeks setNumber(String Number) {
+        this.Number = Number;
         return this;
     }
 
@@ -51,6 +51,4 @@ public class OptionsWeeks {
         value = value + name;
         return this;
     }
-
-
 }

@@ -24,23 +24,28 @@ export const Graf1: FC<Props> = props => {
     switch (props.rangeType) {
       case 'weeks':
         const getWeekNumber = (date: Date) =>
-          Math.ceil(((date.getTime() - onejan(date).getTime()) / 86400000 + onejan(date).getDay() + 1) / 7);
-        const onejan = (date: Date) => new Date(start.getFullYear(), 0, 1);
+          Math.ceil(((date.getTime() - oneJan(date).getTime()) / 86400000 + oneJan(date).getDay() + 1) / 7);
+        const oneJan = (date: Date) => new Date(start.getFullYear(), 0, 1);
         startBorder = getWeekNumber(start);
         endBorder = getWeekNumber(end);
         console.log(startBorder, endBorder, currStepWeek);
         return currStepWeek >= startBorder && currStepWeek <= endBorder;
         break;
       case 'months':
-        startBorder = props.startDate.getMonth();
-        endBorder = props.endDate.getMonth() + 12;
+        const getMonthNumber = (date: Date) =>
+          Math.ceil(((date.getTime() - oneJan1(date).getTime()) / 86400000 + oneJan1(date).getMonth() + 1) / 30);
+        const oneJan1 = (date: Date) => new Date(start.getFullYear(), 0, 1);
+        startBorder = getMonthNumber(start);
+        endBorder = getMonthNumber(end);
         console.log(startBorder, endBorder, currStepMonth);
         return currStepMonth >= startBorder && currStepMonth <= endBorder;
         break;
       case 'quarters':
-        const getQuarterNumber = (date: Date) => Math.floor((date.getMonth() + 3) / 3);
+        const getQuarterNumber = (date: Date) =>
+          Math.ceil(((date.getTime() - oneJan2(date).getTime()) / 86400000 + oneJan2(date).getDay() + 1) / 90);
+        const oneJan2 = (date: Date) => new Date(start.getFullYear(), 0, 1);
         startBorder = getQuarterNumber(start);
-        endBorder = getQuarterNumber(end) + 4;
+        endBorder = getQuarterNumber(end);
         console.log(startBorder, endBorder, currStepQuarter);
         return currStepQuarter >= startBorder && currStepQuarter <= endBorder;
         break;
@@ -51,10 +56,10 @@ export const Graf1: FC<Props> = props => {
 
   const convertToArray = data => {
     const dateArray = Object.keys(data).map(key => ({
-      date: data[key].weekNumber,
+      date: data[key].number,
       value: data[key].value,
       yearDate: data[key].year,
-      XAxisKey: `${data[key].weekNumber}/${data[key].year}`,
+      XAxisKey: `${data[key].number}/${data[key].year}`,
     }));
     console.log(dateArray);
     return dateArray.filter(d => isInDateInterval(props.startDate, props.endDate, d.date, d.yearDate));

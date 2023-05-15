@@ -6,51 +6,44 @@ import com.google.gson.Gson;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.DateSelecetMethod;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.Item;
 import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsQuarters;
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsWeeks;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Quarter {
 
-    public List<OptionsQuarters> Quarters() throws Exception {
+    public List<OptionsQuarters> quarters() throws Exception {
         List<Item> items = new Gson()
-            .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {
-            }.getType());
+            .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
         List<OptionsQuarters> quarters = new ArrayList<>();
-        items.stream()
+        items
+            .stream()
             .forEach(i -> {
                 OptionsQuarters optionsQuarters;
                 try {
-                    optionsQuarters = OptionsQuarters.quarter()
-                        .setQuarterNumber(getQuarter(i.getName()).getName())
-                        .setYear(getYear(i.getName()).getName())
-                        .setValue(getValue(i.getValue()).getValue());
-
+                    optionsQuarters =
+                        OptionsQuarters
+                            .quarter()
+                            .setNumber(getQuarter(i.getName()).getName())
+                            .setYear(getYear(i.getName()).getName())
+                            .setValue(getValue(i.getValue()).getValue());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
 
-                Optional<OptionsQuarters> quarter = quarters.stream()
-                    .filter(qk -> qk.key().equals(optionsQuarters.key()))
-                    .findFirst();
+                Optional<OptionsQuarters> quarter = quarters.stream().filter(qk -> qk.key().equals(optionsQuarters.key())).findFirst();
 
                 if (quarter.isPresent()) {
                     quarter.get().addValue(optionsQuarters.getValue());
                 } else {
                     quarters.add(optionsQuarters);
                 }
-
             });
         return quarters;
     }

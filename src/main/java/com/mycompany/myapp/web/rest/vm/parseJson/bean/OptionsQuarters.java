@@ -6,25 +6,25 @@ public class OptionsQuarters {
 
     private String year;
 
-    private String quarterNumber;
+    private String Number;
 
-    public OptionsQuarters(int value, String year, String weekNumber) {
+    public OptionsQuarters(int value, String year, String Number) {
         this.value = value;
         this.year = year;
-        this.quarterNumber = weekNumber;
+        this.Number = Number;
     }
 
     public String key() {
-        return quarterNumber + "/" + year;
+        return Number + "/" + year;
     }
 
     public OptionsQuarters() {
         this.value = value;
         this.year = year;
-        this.quarterNumber = quarterNumber;
+        this.Number = Number;
     }
 
-    public static OptionsQuarters quarter(){
+    public static OptionsQuarters quarter() {
         return new OptionsQuarters();
     }
 
@@ -46,12 +46,12 @@ public class OptionsQuarters {
         return this;
     }
 
-    public String getQuarterNumber() {
-        return quarterNumber;
+    public String getNumber() {
+        return Number;
     }
 
-    public OptionsQuarters setQuarterNumber(String quarterNumber) {
-        this.quarterNumber = quarterNumber;
+    public OptionsQuarters setNumber(String Number) {
+        this.Number = Number;
         return this;
     }
 

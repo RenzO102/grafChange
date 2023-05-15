@@ -23,29 +23,28 @@ public class Week {
             .fromJson(new String(Files.readAllBytes(Paths.get("test2.json"))), new TypeToken<List<Item>>() {}.getType());
 
         List<OptionsWeeks> weeks = new ArrayList<>();
-        items.stream()
+        items
+            .stream()
             .forEach(i -> {
                 OptionsWeeks optionsWeeks;
                 try {
-                    optionsWeeks = OptionsWeeks.week()
-                        .setWeekNumber(getWeek(i.getName()).getName())
-                       .setYear(getYear(i.getName()).getName())
-                        .setValue(getValue(i.getValue()).getValue());
-
+                    optionsWeeks =
+                        OptionsWeeks
+                            .week()
+                            .setNumber(getWeek(i.getName()).getName())
+                            .setYear(getYear(i.getName()).getName())
+                            .setValue(getValue(i.getValue()).getValue());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
 
-                Optional<OptionsWeeks> week1 =  weeks.stream()
-                    .filter(wk -> wk.key().equals(optionsWeeks.key()))
-                    .findFirst();
+                Optional<OptionsWeeks> week1 = weeks.stream().filter(wk -> wk.key().equals(optionsWeeks.key())).findFirst();
 
                 if (week1.isPresent()) {
                     week1.get().addValue(optionsWeeks.getValue());
                 } else {
                     weeks.add(optionsWeeks);
                 }
-
             });
         return weeks;
     }

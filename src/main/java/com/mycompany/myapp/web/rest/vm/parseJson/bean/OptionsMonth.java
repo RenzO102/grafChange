@@ -4,28 +4,28 @@ public class OptionsMonth {
 
     private int value;
     private String year;
-    private String monthNumber;
+    private String Number;
 
     public OptionsMonth() {
         this.value = value;
         this.year = year;
-        this.monthNumber = monthNumber();
+        this.Number = Number();
     }
 
-    public static OptionsMonth month(){
+    public static OptionsMonth month() {
         return new OptionsMonth();
     }
 
     public String key() {
-        return monthNumber + "/" + year;
+        return Number + "/" + year;
     }
 
     public int value() {
         return value;
     }
 
-    public String monthNumber() {
-        return monthNumber;
+    public String Number() {
+        return Number;
     }
 
     public String year() {
@@ -41,12 +41,12 @@ public class OptionsMonth {
         return this;
     }
 
-    public String getMonthNumber() {
-        return monthNumber;
+    public String getNumber() {
+        return Number;
     }
 
-    public OptionsMonth setMonthNumber(String monthNumber) {
-        this.monthNumber = monthNumber;
+    public OptionsMonth setNumber(String Number) {
+        this.Number = Number;
         return this;
     }
 

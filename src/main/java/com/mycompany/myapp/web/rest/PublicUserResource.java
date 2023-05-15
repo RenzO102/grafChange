@@ -2,15 +2,12 @@ package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.UserDTO;
-import com.mycompany.myapp.web.rest.vm.parseJson.Quarter;
-import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsQuarters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -62,14 +59,6 @@ public class PublicUserResource {
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllPublicUsers(pageable)));
-    }
-
-    @Autowired
-    private Quarter quarters;
-
-    @GetMapping("/quarters")
-    public List<OptionsQuarters> getQuarter() throws Exception {
-        return quarters.Quarters();
     }
 
     private boolean onlyContainsAllowedProperties(Pageable pageable) {
