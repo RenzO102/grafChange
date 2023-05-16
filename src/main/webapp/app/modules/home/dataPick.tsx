@@ -22,14 +22,20 @@ const requestDateRange = async (rangeType: RangeType) => {
 export const TableDatePicker: FC<Props> = props => {
   const changeStartDate = (isAdd: boolean) => {
     const newDate = new Date(props.startDate);
-    newDate.setDate(newDate.getDate() + (isAdd ? 30 : -30));
+    newDate.setDate(
+      newDate.getDate() +
+        (isAdd ? props.startDate.setMonth(props.startDate.getMonth() - 1) : -props.startDate.setMonth(props.startDate.getMonth() - 1))
+    );
     if (newDate > props.endDate) return;
     props.pickStartDate(newDate);
   };
 
   const changeEndDate = (isAdd: boolean) => {
     const newDate = new Date(props.endDate);
-    newDate.setDate(newDate.getDate() + (isAdd ? 30 : -30));
+    newDate.setDate(
+      newDate.getDate() +
+        (isAdd ? props.endDate.setMonth(props.endDate.getMonth() - 1) : -props.endDate.setMonth(props.endDate.getMonth() - 1))
+    );
     if (newDate < props.startDate) return;
     props.pickEndDate(newDate);
   };
