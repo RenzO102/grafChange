@@ -4,7 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mycompany.myapp.security.jwt.JWTFilter;
 import com.mycompany.myapp.security.jwt.TokenProvider;
 import com.mycompany.myapp.web.rest.vm.LoginVM;
+import com.mycompany.myapp.web.rest.vm.parseJson.Month;
+import com.mycompany.myapp.web.rest.vm.parseJson.Quarter;
+import com.mycompany.myapp.web.rest.vm.parseJson.Week;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsMonth;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsQuarters;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsWeeks;
+import java.util.List;
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +20,6 @@ import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 /**
  * Controller to authenticate users.
@@ -48,6 +55,29 @@ public class UserJWTController {
     /**
      * Object to return as body in JWT Authentication.
      */
+
+    @Autowired
+    private Quarter quarters;
+
+    private Month month;
+
+    private Week week;
+
+    @GetMapping("/months")
+    public List<OptionsMonth> getMonth() throws Exception {
+        return month.month();
+    }
+
+    @GetMapping("/weeks")
+    public List<OptionsWeeks> getWeek() throws Exception {
+        return week.week();
+    }
+
+    @GetMapping("/quarters")
+    public List<OptionsQuarters> getQuarter() throws Exception {
+        return quarters.quarters();
+    }
+
     static class JWTToken {
 
         private String idToken;

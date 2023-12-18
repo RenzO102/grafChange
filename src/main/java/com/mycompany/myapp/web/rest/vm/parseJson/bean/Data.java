@@ -1,12 +1,8 @@
-package com.mycompany.myapp.web.rest.vm.parseJson;
+package com.mycompany.myapp.web.rest.vm.parseJson.bean;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class Data {
 
     private List<Item> items = new ArrayList<>();
@@ -14,5 +10,13 @@ public class Data {
     @Override
     public String toString() {
         return "Data{" + "people=" + items + '}';
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 }

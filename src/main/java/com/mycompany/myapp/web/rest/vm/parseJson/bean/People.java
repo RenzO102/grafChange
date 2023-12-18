@@ -1,4 +1,4 @@
-package com.mycompany.myapp.web.rest.vm.parseJson;
+package com.mycompany.myapp.web.rest.vm.parseJson.bean;
 
 import java.time.LocalDate;
 
@@ -6,7 +6,8 @@ public class People {
 
     private String percentY;
     private String name;
-    private int main;
+    private int value;
+
     public int y;
     private int z;
 
@@ -27,7 +28,7 @@ public class People {
 
         private LocalDate name;
         private String percentY;
-        private long main;
+        private long value;
         private long y;
         private long z;
 
@@ -47,12 +48,12 @@ public class People {
             this.percentY = value;
         }
 
-        public long getMain() {
-            return main;
+        public long getValue() {
+            return value;
         }
 
-        public void setMain(long value) {
-            this.main = value;
+        public void setValue(long value) {
+            this.value = value;
         }
 
         public long getY() {
@@ -74,6 +75,6 @@ public class People {
 
     @Override
     public String toString() {
-        return "People{" + "percentY='" + percentY + '\'' + ", name='" + name + '\'' + ", main=" + main + ", y=" + y + ", z=" + z + '}';
+        return "People{" + "percentY='" + percentY + '\'' + ", name='" + name + '\'' + ", value=" + value + ", y=" + y + ", z=" + z + '}';
     }
 }

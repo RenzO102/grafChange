@@ -12,9 +12,11 @@ import com.mycompany.myapp.web.rest.errors.LoginAlreadyUsedException;
 import com.mycompany.myapp.web.rest.vm.KeyAndPasswordVM;
 import com.mycompany.myapp.web.rest.vm.ManagedUserVM;
 import com.mycompany.myapp.web.rest.vm.parseJson.Month;
-import com.mycompany.myapp.web.rest.vm.parseJson.Quarter;
 import com.mycompany.myapp.web.rest.vm.parseJson.Week;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsMonth;
+import com.mycompany.myapp.web.rest.vm.parseJson.bean.OptionsWeeks;
 import java.security.Principal;
+import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -113,27 +115,8 @@ public class AccountResource {
 
     /**
      * Тут запрос на сервер
+     *
      */
-    @Autowired
-    private Month month;
-
-    private Week week;
-    private Quarter quarter;
-
-    @GetMapping("/Quarter")
-    public Quarter getQuarter() throws Exception {
-        return quarter.main();
-    }
-
-    @GetMapping("/Month")
-    public Month getMonth() throws Exception {
-        return month.main();
-    }
-
-    @GetMapping("/Week")
-    public Week getWeek() throws Exception {
-        return week.main();
-    }
 
     /**
      * {@code POST  /account} : update the current user information.

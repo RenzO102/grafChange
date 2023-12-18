@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-
+import React, { FC, useState } from 'react';
+import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -8,21 +8,43 @@ interface Props {
   pickStartDate: (date: Date) => void;
   endDate: Date;
   pickEndDate: (date: Date) => void;
+  pickDateRange: (range: any) => void;
+  pickRangeType: (type: RangeType) => void;
 }
+
+export type RangeType = 'weeks' | 'months' | 'quarters';
+
+const requestDateRange = async (rangeType: RangeType) => {
+  const response = await axios.get<any>(`/api/${rangeType}`);
+  return response.data;
+};
 
 export const TableDatePicker: FC<Props> = props => {
   const changeStartDate = (isAdd: boolean) => {
     const newDate = new Date(props.startDate);
-    newDate.setDate(newDate.getDate() + (isAdd ? 30 : -30));
+    newDate.setDate(
+      newDate.getDate() +
+        (isAdd ? props.startDate.setMonth(props.startDate.getMonth() - 1) : -props.startDate.setMonth(props.startDate.getMonth() - 1))
+    );
     if (newDate > props.endDate) return;
     props.pickStartDate(newDate);
   };
 
   const changeEndDate = (isAdd: boolean) => {
     const newDate = new Date(props.endDate);
-    newDate.setDate(newDate.getDate() + (isAdd ? 30 : -30));
+    newDate.setDate(
+      newDate.getDate() +
+        (isAdd ? props.endDate.setMonth(props.endDate.getMonth() - 1) : -props.endDate.setMonth(props.endDate.getMonth() - 1))
+    );
     if (newDate < props.startDate) return;
     props.pickEndDate(newDate);
+  };
+
+  const getDateRange = async (rangeType: 'weeks' | 'months' | 'quarters') => {
+    const data = await requestDateRange(rangeType);
+    props.pickRangeType(rangeType);
+    props.pickDateRange(data);
+    console.log(Object.entries(data));
   };
 
   return (
@@ -35,7 +57,6 @@ export const TableDatePicker: FC<Props> = props => {
           startDate={props.startDate}
           endDate={props.endDate}
           onSelect={props.pickStartDate}
-          dateFormat={'dd.MM.yy'}
         />
         <button onClick={() => changeStartDate(true)}> {'>'} </button>
       </div>
@@ -49,10 +70,14 @@ export const TableDatePicker: FC<Props> = props => {
           endDate={props.endDate}
           minDate={props.startDate}
           onSelect={props.pickEndDate}
-          dateFormat={'dd.MM.yy'}
         />
+
         <button onClick={() => changeEndDate(true)}> {'>'} </button>
       </div>
+
+      <button onClick={() => getDateRange('weeks')}> week </button>
+      <button onClick={() => getDateRange('months')}> months </button>
+      <button onClick={() => getDateRange('quarters')}> quarters </button>
     </div>
   );
 };
